@@ -1,32 +1,79 @@
-import textwrap
-from typing import Final
-from typing import final
-
 from django.db import models
 
-#: That's how constants should be defined.
-_POST_TITLE_MAX_LENGTH: Final = 80
 
-
-@final
-class BlogPost(models.Model):
-    """This model is used just as an example.
-
-    With it we show how one can:
-    - Use fixtures and factories
-    - Use migrations testing
-    """
-
-    title = models.CharField(max_length=_POST_TITLE_MAX_LENGTH)
-    body = models.TextField()
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class ClientInfo(models.Model):
+    """Monobank client info and a token."""
+    client_id = models.CharField(max_length=255, primary_key=True)
+    name = models.CharField(max_length=255)
+    token = models.CharField(max_length=255)
 
     class Meta:
-        verbose_name = 'BlogPost'  # You can probably use `gettext` for this
-        verbose_name_plural = 'BlogPosts'
+        """Override table definition."""
+        db_table = 'client_info'
+        verbose_name = 'Client Info'
+        verbose_name_plural = 'Client Info'
 
     def __str__(self) -> str:
-        """All django models should have this method."""
-        return textwrap.wrap(self.title, _POST_TITLE_MAX_LENGTH // 4)[0]
+        """Provide string representation."""
+        return self.name
+
+
+class Account(models.Model):
+    """A clients account."""
+    id = models.CharField(max_length=255, primary_key=True)
+    send_id = models.CharField(max_length=255)
+    balance = models.BigIntegerField()
+    credit_limit = models.BigIntegerField()
+    account_type = models.CharField(max_length=255)
+    currency_code = models.IntegerField()
+    cashback_type = models.CharField(max_length=255, null=True, blank=True)
+    iban = models.CharField(max_length=255, null=True, blank=True)
+    last_sync_at = models.DateTimeField(null=True, blank=True)
+    client = models.ForeignKey(
+        ClientInfo, related_name='accounts', on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        """Override table definition."""
+        db_table = 'accounts'
+        verbose_name = 'Account'
+        verbose_name_plural = 'Accounts'
+
+    def __str__(self) -> str:
+        """Provide string representation."""
+        return self.id
+
+
+class StatementItem(models.Model):
+    """A single transaction associated with an account."""
+    id = models.CharField(max_length=255, primary_key=True)
+    account = models.ForeignKey(
+        Account, related_name='statement_items', on_delete=models.CASCADE,
+    )
+    time = models.DateTimeField()
+    description = models.TextField()
+    mcc = models.IntegerField()
+    original_mcc = models.IntegerField()
+    hold = models.BooleanField()
+    amount = models.BigIntegerField()
+    operation_amount = models.BigIntegerField()
+    currency_code = models.IntegerField()
+    commission_rate = models.BigIntegerField()
+    cashback_amount = models.BigIntegerField()
+    balance = models.BigIntegerField()
+    comment = models.TextField(null=True, blank=True)
+    receipt_id = models.CharField(max_length=255, null=True, blank=True)
+    invoice_id = models.CharField(max_length=255, null=True, blank=True)
+    counter_edrpou = models.CharField(max_length=255, null=True, blank=True)
+    counter_iban = models.CharField(max_length=255, null=True, blank=True)
+    counter_name = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        """Override table definition."""
+        db_table = 'statement_items'
+        verbose_name = 'Statement Item'
+        verbose_name_plural = 'Statement Items'
+
+    def __str__(self) -> str:
+        """Provide string representation."""
+        return self.id
