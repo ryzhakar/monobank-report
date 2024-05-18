@@ -4,13 +4,11 @@ description = "Financial reports based on monobank statements."
 version = "0.1.0"
 readme = "README.md"
 authors = []
-classifiers = [
-  "Private :: Do not Upload",
-]
+classifiers = []
 
 
 [tool.poetry.dependencies]
-python = "3.11.5"
+python = "3.11.9"
 
 django = { version = "^4.2", extras = ["argon2"] }
 django-split-settings = "^1.3"
