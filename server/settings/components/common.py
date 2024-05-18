@@ -1,5 +1,4 @@
-"""
-Django settings for server project.
+"""Django settings for server project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/4.2/topics/settings/
@@ -7,12 +6,10 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their config, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
-from typing import Dict, List, Tuple, Union
-
 from django.utils.translation import gettext_lazy as _
 
-from server.settings.components import BASE_DIR, config
+from server.settings.components import BASE_DIR
+from server.settings.components import config
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -21,7 +18,7 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 # Application definition:
 
-INSTALLED_APPS: Tuple[str, ...] = (
+INSTALLED_APPS: tuple[str, ...] = (
     # Your apps go here:
     'server.apps.main',
 
@@ -48,7 +45,7 @@ INSTALLED_APPS: Tuple[str, ...] = (
     'health_check.storage',
 )
 
-MIDDLEWARE: Tuple[str, ...] = (
+MIDDLEWARE: tuple[str, ...] = (
     # Logging:
     'server.settings.components.logging.LoggingContextVarsMiddleware',
 
@@ -108,7 +105,6 @@ USE_I18N = True
 
 LANGUAGES = (
     ('en', _('English')),
-    ('ru', _('Russian')),
 )
 
 LOCALE_PATHS = (
@@ -194,7 +190,7 @@ X_FRAME_OPTIONS = 'DENY'
 REFERRER_POLICY = 'same-origin'
 
 # https://github.com/adamchainz/django-permissions-policy#setting
-PERMISSIONS_POLICY: Dict[str, Union[str, List[str]]] = {}  # noqa: WPS234
+PERMISSIONS_POLICY: dict[str, str | list[str]] = {}  # noqa: WPS234
 
 
 # Timeouts
