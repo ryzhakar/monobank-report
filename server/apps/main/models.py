@@ -1,6 +1,22 @@
 from django.db import models
 
 
+class MerchantCategoryCode(models.Model):
+    """Merchant category code."""
+    code = models.IntegerField(primary_key=True)
+    description = models.CharField(max_length=255)
+    of_interest = models.BooleanField(default=False)
+
+    class Meta:
+        """Override naming."""
+        verbose_name = 'Merchant Category Code'
+        verbose_name_plural = 'Merchant Category Codes'
+
+    def __str__(self) -> str:
+        """Provide string representation."""
+        return self.description
+
+
 class ClientInfo(models.Model):
     """Monobank client info and a token."""
     client_id = models.CharField(max_length=255, primary_key=True)

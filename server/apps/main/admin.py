@@ -3,6 +3,13 @@ from django.contrib import admin
 from server.apps.main import models
 
 
+@admin.register(models.MerchantCategoryCode)
+class MerchantCategoryCodeAdmin(admin.ModelAdmin[models.MerchantCategoryCode]):
+    """Admin representation."""
+    list_display = ('description', 'code', 'of_interest')
+    search_fields = ('code', 'description')
+
+
 @admin.register(models.ClientInfo)
 class ClientInfoAdmin(admin.ModelAdmin[models.ClientInfo]):
     """Admin representation."""
