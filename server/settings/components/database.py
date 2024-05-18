@@ -5,6 +5,6 @@ from server.settings.components import config
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': config('DATABASE_URL'),
+        'NAME': str(config('DATABASE_URL')).replace('sqlite://', ''),
     },
 }

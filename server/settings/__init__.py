@@ -26,6 +26,7 @@ _base_settings = (
     'components/logging.py',
     'components/csp.py',
     'components/caches.py',
+    'components/database.py',
 
     # Select the right env:
     f'environments/{_ENV}.py',
