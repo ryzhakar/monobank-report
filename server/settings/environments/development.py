@@ -7,7 +7,6 @@ import socket
 from typing import TYPE_CHECKING
 
 from server.settings.components import config
-from server.settings.components.common import DATABASES
 from server.settings.components.common import INSTALLED_APPS
 from server.settings.components.common import MIDDLEWARE
 from server.settings.components.csp import CSP_CONNECT_SRC
@@ -70,7 +69,7 @@ MIDDLEWARE += (
 # https://django-debug-toolbar.readthedocs.io/en/stable/installation.html#configure-internal-ips
 try:  # This might fail on some OS
     INTERNAL_IPS = [
-        '{}.1'.format(ip[:ip.rfind('.')])
+        '{}.1'.format(ip[:ip.rfind('.')])  # noqa: P101
         for ip in socket.gethostbyname_ex(socket.gethostname())[2]
     ]
 except OSError:  # pragma: no cover
@@ -157,7 +156,3 @@ EXTRA_CHECKS = {
         'field-choices-constraint',
     ],
 }
-
-# Disable persistent DB connections
-# https://docs.djangoproject.com/en/4.2/ref/databases/#caveats
-DATABASES['default']['CONN_MAX_AGE'] = 0
