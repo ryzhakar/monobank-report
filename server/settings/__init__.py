@@ -1,5 +1,4 @@
-"""
-This is a django-split-settings main file.
+"""This is a django-split-settings main file.
 
 For more information read this:
 https://github.com/sobolevn/django-split-settings
@@ -8,11 +7,11 @@ https://sobolevn.me/2017/04/managing-djangos-settings
 To change settings file:
 `DJANGO_ENV=production python manage.py runserver`
 """
-
 from os import environ
 
 import django_stubs_ext
-from split_settings.tools import include, optional
+from split_settings.tools import include
+from split_settings.tools import optional
 
 # Monkeypatching Django, so stubs will work for all generics,
 # see: https://github.com/typeddjango/django-stubs
@@ -29,7 +28,7 @@ _base_settings = (
     'components/caches.py',
 
     # Select the right env:
-    'environments/{0}.py'.format(_ENV),
+    f'environments/{_ENV}.py',
 
     # Optionally override some settings:
     optional('environments/local.py'),

@@ -1,5 +1,4 @@
-"""
-Main URL mapping configuration file.
+"""Main URL mapping configuration file.
 
 Include other URLConfs from external apps using method `include()`.
 
@@ -8,11 +7,11 @@ It is also a good practice to keep a single URL to the root index page.
 This examples uses Django's default media
 files serving technique in development.
 """
-
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admindocs import urls as admindocs_urls
-from django.urls import include, path
+from django.urls import include
+from django.urls import path
 from django.views.generic import TemplateView
 from health_check import urls as health_urls
 
@@ -33,14 +32,18 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # Text and xml static files:
-    path('robots.txt', TemplateView.as_view(
-        template_name='txt/robots.txt',
-        content_type='text/plain',
-    )),
-    path('humans.txt', TemplateView.as_view(
-        template_name='txt/humans.txt',
-        content_type='text/plain',
-    )),
+    path(
+        'robots.txt', TemplateView.as_view(
+            template_name='txt/robots.txt',
+            content_type='text/plain',
+        ),
+    ),
+    path(
+        'humans.txt', TemplateView.as_view(
+            template_name='txt/humans.txt',
+            content_type='text/plain',
+        ),
+    ),
 
     # It is a good practice to have explicit index view:
     path('', index, name='index'),

@@ -1,11 +1,11 @@
 # Logging
 # https://docs.djangoproject.com/en/4.2/topics/logging/
-
 # See also:
 # 'Do not log' by Nikita Sobolev (@sobolevn)
 # https://sobolevn.me/2020/03/do-not-log
-
-from typing import TYPE_CHECKING, Callable, final
+from collections.abc import Callable
+from typing import final
+from typing import TYPE_CHECKING
 
 import structlog
 
@@ -69,7 +69,7 @@ LOGGING = {
 
 
 @final
-class LoggingContextVarsMiddleware(object):
+class LoggingContextVarsMiddleware:
     """Used to reset ContextVars in structlog on each request."""
 
     def __init__(
@@ -80,8 +80,7 @@ class LoggingContextVarsMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request: 'HttpRequest') -> 'HttpResponse':
-        """
-        Handle requests.
+        """Handle requests.
 
         Add your logging metadata here.
         Example: https://github.com/jrobichaud/django-structlog

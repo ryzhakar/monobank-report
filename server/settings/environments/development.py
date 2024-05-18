@@ -1,24 +1,18 @@
-"""
-This file contains all the settings that defines the development server.
+"""This file contains all the settings that defines the development server.
 
 SECURITY WARNING: don't run with debug turned on in production!
 """
-
 import logging
 import socket
 from typing import TYPE_CHECKING
 
 from server.settings.components import config
-from server.settings.components.common import (
-    DATABASES,
-    INSTALLED_APPS,
-    MIDDLEWARE,
-)
-from server.settings.components.csp import (
-    CSP_CONNECT_SRC,
-    CSP_IMG_SRC,
-    CSP_SCRIPT_SRC,
-)
+from server.settings.components.common import DATABASES
+from server.settings.components.common import INSTALLED_APPS
+from server.settings.components.common import MIDDLEWARE
+from server.settings.components.csp import CSP_CONNECT_SRC
+from server.settings.components.csp import CSP_IMG_SRC
+from server.settings.components.csp import CSP_SCRIPT_SRC
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
@@ -76,10 +70,10 @@ MIDDLEWARE += (
 # https://django-debug-toolbar.readthedocs.io/en/stable/installation.html#configure-internal-ips
 try:  # This might fail on some OS
     INTERNAL_IPS = [
-        '{0}.1'.format(ip[:ip.rfind('.')])
+        '{}.1'.format(ip[:ip.rfind('.')])
         for ip in socket.gethostbyname_ex(socket.gethostname())[2]
     ]
-except socket.error:  # pragma: no cover
+except OSError:  # pragma: no cover
     INTERNAL_IPS = []
 INTERNAL_IPS += ['127.0.0.1', '10.0.2.2']
 

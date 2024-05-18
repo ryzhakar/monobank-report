@@ -1,12 +1,10 @@
 #!/usr/bin/env python
-
 import os
 import sys
 
 
 def main() -> None:
-    """
-    Main function.
+    """Main function.
 
     It does several things:
     1. Sets default settings module, if it is not set

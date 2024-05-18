@@ -1,5 +1,6 @@
 import textwrap
-from typing import Final, final
+from typing import Final
+from typing import final
 
 from django.db import models
 
@@ -9,13 +10,11 @@ _POST_TITLE_MAX_LENGTH: Final = 80
 
 @final
 class BlogPost(models.Model):
-    """
-    This model is used just as an example.
+    """This model is used just as an example.
 
     With it we show how one can:
     - Use fixtures and factories
     - Use migrations testing
-
     """
 
     title = models.CharField(max_length=_POST_TITLE_MAX_LENGTH)
@@ -24,7 +23,7 @@ class BlogPost(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta(object):
+    class Meta:
         verbose_name = 'BlogPost'  # You can probably use `gettext` for this
         verbose_name_plural = 'BlogPosts'
 
