@@ -11,10 +11,13 @@ def get_month_range(
     months_date: date,
     *,
     stop_today: bool = True,
+    start_day: int = 1,
 ) -> tuple[date, date]:
     """Get the start and end date of a month."""
-    start = months_date.replace(day=1)
+    start = months_date.replace(day=start_day)
     today = date.today()
+    if today.day < start_day:
+        start = start - relativedelta(months=1)
     end = start + relativedelta(months=1) - relativedelta(days=1)
     if end > today and stop_today:
         end = today

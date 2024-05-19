@@ -19,6 +19,11 @@ def list_clients(
     return list(models.ClientInfo.objects.all()[skip:skip + limit])
 
 
+def get_budgeting_config() -> models.BudgetingConfig:
+    """Get or create a budgeting config."""
+    return models.BudgetingConfig.load()
+
+
 def list_daily_spending_for(
     *,
     client: models.ClientInfo,

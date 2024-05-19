@@ -8,7 +8,9 @@ class BudgetingConfig(models.Model):
     """Singleton model for budgeting configuration."""
     daily_allowance = models.IntegerField(
         help_text='Daily spending limit in integer value',
+        default=100000,
     )
+    budgeting_start_day = models.IntegerField(default=1)
 
     class Meta:
         """Override naming."""
@@ -32,7 +34,7 @@ class BudgetingConfig(models.Model):
     @classmethod
     def load(cls) -> 'BudgetingConfig':
         """Load or create the singleton instance."""
-        single_object, _ = cls.objects.get_or_create(pk=1, daily_allowance=0)
+        single_object, _ = cls.objects.get_or_create(pk=1)
         return single_object
 
 
