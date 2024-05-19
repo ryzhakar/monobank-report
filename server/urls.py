@@ -4,8 +4,8 @@ Include other URLConfs from external apps using method `include()`.
 
 It is also a good practice to keep a single URL to the root index page.
 
-This examples uses Django's default media
-files serving technique in development.
+This examples uses Django's default media files serving technique in
+development.
 """
 from django.conf import settings
 from django.contrib import admin
@@ -15,15 +15,11 @@ from django.urls import path
 from django.views.generic import TemplateView
 from health_check import urls as health_urls
 
-from server.apps.main import urls as main_urls
-from server.apps.main.views import index
+from server.apps.main.views import per_day_spending_view
 
 admin.autodiscover()
 
 urlpatterns = [
-    # Apps:
-    path('main/', include(main_urls, namespace='main')),
-
     # Health checks:
     path('health/', include(health_urls)),
 
@@ -45,8 +41,7 @@ urlpatterns = [
         ),
     ),
 
-    # It is a good practice to have explicit index view:
-    path('', index, name='index'),
+    path('', per_day_spending_view, name='per_day_spending_view'),
 ]
 
 if settings.DEBUG:  # pragma: no cover

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Per Day Spending</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Spending from {{ from_date }} to {{ to_date }} in {{ currency.name }}</h1>
+    {% for client_name, daily_spending in all_clients_spending.items %}
+        <h2>Client: {{ client_name }}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Spending</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for day, amount in daily_spending.items %}
+                    <tr>
+                        <td>{{ day }}</td>
+                        <td>{{ amount }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+</body>
+</html>
