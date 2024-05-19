@@ -55,52 +55,49 @@ def list_daily_cumulative_limit_remainders(
 ) -> dict[date, int]:
     """Calculate daily cumulative allowance remainers with daily overflows."""
     start_date, end_date = inclusive_date_range
-
-    sql_query = """
-        WITH RECURSIVE
-        DateRange(day) AS (
-            SELECT %s
-            UNION ALL
-            SELECT date(day, '+1 day') FROM DateRange WHERE day <= %s
-        ),
-        MCCFilter AS (
-            SELECT code FROM main.main_merchantcategorycode WHERE of_interest = 1
-        ),
-        DailyAllowance AS (
-            SELECT daily_allowance FROM single_budgeting_config LIMIT 1  -- Assuming only one row exists
-        ),
-        DailySpending AS (
-            SELECT
-                DATE(time) AS day,
-                SUM(operation_amount) AS total_spending
-            FROM
-                statement_items
-            WHERE
-                currency_code = %s AND
-                mcc IN (SELECT code FROM MCCFilter) AND
-                DATE(time) BETWEEN %s AND %s
-            GROUP BY DATE(time)
-        ),
-        CumulativeResults AS (
-            SELECT
-                dr.day,
-                COALESCE(SUM(ds.total_spending) OVER (ORDER BY dr.day), 0) AS cumulative_spending,
-                (SELECT daily_allowance FROM DailyAllowance) * (SELECT COUNT(*) FROM DateRange WHERE day <= dr.day) AS cumulative_allowance
-            FROM
-                DateRange dr
-            LEFT JOIN
-                DailySpending ds ON dr.day = ds.day
-        )
-        SELECT
-            day,
-            cumulative_allowance - cumulative_spending AS remaining_limit
-        FROM
-            CumulativeResults
-    """
-
     with connection.cursor() as cursor:
-        cursor.execute(
-            sql_query,
+        cursor.execute(  # noqa: WPS462
+            """
+            WITH RECURSIVE
+            DateRange(day) AS (
+                SELECT %s
+                UNION ALL
+                SELECT date(day, '+1 day') FROM DateRange WHERE day <= %s
+            ),
+            MCCFilter AS (
+                SELECT code FROM main.main_merchantcategorycode WHERE of_interest = 1
+            ),
+            DailyAllowance AS (
+                SELECT daily_allowance FROM single_budgeting_config LIMIT 1  -- Assuming only one row exists
+            ),
+            DailySpending AS (
+                SELECT
+                    DATE(time) AS day,
+                    SUM(operation_amount) AS total_spending
+                FROM
+                    statement_items
+                WHERE
+                    currency_code = %s AND
+                    mcc IN (SELECT code FROM MCCFilter) AND
+                    DATE(time) BETWEEN %s AND %s
+                GROUP BY DATE(time)
+            ),
+            CumulativeResults AS (
+                SELECT
+                    dr.day,
+                    COALESCE(SUM(ds.total_spending) OVER (ORDER BY dr.day), 0) AS cumulative_spending,
+                    (SELECT daily_allowance FROM DailyAllowance) * (SELECT COUNT(*) FROM DateRange WHERE day <= dr.day) AS cumulative_allowance
+                FROM
+                    DateRange dr
+                LEFT JOIN
+                    DailySpending ds ON dr.day = ds.day
+            )
+            SELECT
+                day,
+                cumulative_allowance + cumulative_spending AS remaining_limit
+            FROM
+                CumulativeResults
+            """,
             [
                 start_date,
                 end_date,
@@ -109,4 +106,7 @@ def list_daily_cumulative_limit_remainders(
                 end_date,
             ],
         )
-        return {row[0]: int(row[1]) for row in cursor.fetchall()}
+        return {
+            date.fromisoformat(strdate): int(strremainder)
+            for strdate, strremainder in cursor.fetchall()
+        }

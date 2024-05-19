@@ -7,10 +7,17 @@ from django.utils.timezone import now
 from django.utils.timezone import utc
 
 
-def get_month_range(months_date: date) -> tuple[date, date]:
+def get_month_range(
+    months_date: date,
+    *,
+    stop_today: bool = True,
+) -> tuple[date, date]:
     """Get the start and end date of a month."""
     start = months_date.replace(day=1)
+    today = date.today()
     end = start + relativedelta(months=1) - relativedelta(days=1)
+    if end > today and stop_today:
+        end = today
     return start, end
 
 

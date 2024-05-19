@@ -17,6 +17,7 @@
                 {% for client_name in all_clients_spending.keys %}
                     <th>{{ client_name }}</th>
                 {% endfor %}
+                <th>Remaining Allowance</th> <!-- New column for the limit remainders -->
             </tr>
         </thead>
         <tbody>
@@ -26,6 +27,7 @@
                     {% for client_spending in all_clients_spending.values %}
                         <td>{{ client_spending|get_item:date|humanize_monetary }}</td>
                     {% endfor %}
+                    <td>{{ limit_remainders|get_item:date|humanize_monetary }}</td> <!-- Display the limit for each date -->
                 </tr>
             {% endfor %}
         </tbody>
