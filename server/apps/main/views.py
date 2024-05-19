@@ -35,5 +35,6 @@ def per_day_spending_view(request: HttpRequest) -> HttpResponse:
             'currency': CurrencyCode.UAH,
             'from_date': first_day,
             'to_date': last_day,
+            'unique_dates': sorted(default_date_spending.keys()),
         },
     )

@@ -1,3 +1,4 @@
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,24 +25,25 @@
 </head>
 <body>
     <h1>Spending from {{ from_date }} to {{ to_date }} in {{ currency.name }}</h1>
-    {% for client_name, daily_spending in all_clients_spending.items %}
-        <h2>Client: {{ client_name }}</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Spending</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for day, amount in daily_spending.items %}
-                    <tr>
-                        <td>{{ day }}</td>
-                        <td>{{ amount }}</td>
-                    </tr>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                {% for client_name in all_clients_spending.keys %}
+                    <th>{{ client_name }}</th>
                 {% endfor %}
-            </tbody>
-        </table>
-    {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for date in unique_dates %}
+                <tr>
+                    <td>{{ date }}</td>
+                    {% for client_spending in all_clients_spending.values %}
+                        <td>{{ client_spending|get_item:date }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
