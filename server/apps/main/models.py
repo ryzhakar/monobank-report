@@ -18,7 +18,8 @@ class BudgetingConfig(models.Model):
 
     def __str__(self) -> str:
         """Singleton name."""
-        return f'Daily Allowance Limit: {self.daily_allowance}'
+        full_units = self.daily_allowance // 100
+        return f'Daily Allowance Limit: {full_units}'
 
     def save(self, *args: Any, **kwargs: Any) -> None:
         """Ensure only one instance exists."""

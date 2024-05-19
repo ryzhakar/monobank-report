@@ -35,7 +35,7 @@ class MerchantCategoryCodeAdmin(admin.ModelAdmin[models.MerchantCategoryCode]):
 @admin.register(models.ClientInfo)
 class ClientInfoAdmin(admin.ModelAdmin[models.ClientInfo]):
     """Admin representation."""
-    list_display = ('client_id', 'name', 'token')
+    list_display = ('name',)
     search_fields = ('client_id', 'name')
 
 
@@ -43,7 +43,7 @@ class ClientInfoAdmin(admin.ModelAdmin[models.ClientInfo]):
 class AccountAdmin(admin.ModelAdmin[models.Account]):
     """Admin representation."""
     list_display = (
-        'client_id',
+        'client',
         'account_type',
         'balance',
         'credit_limit',
