@@ -91,7 +91,7 @@ LOCALE_PATHS = (
     'locale/',
 )
 
-USE_TZ = True
+USE_TZ = False
 TIME_ZONE = 'UTC'
 
 

@@ -6,7 +6,6 @@ from django.db.models.functions import TruncDate
 
 from .enums import CurrencyCode
 from server.apps.main import models
-from server.apps.main import time_utils as tu
 
 logger = getLogger('django.server')
 
@@ -19,14 +18,10 @@ def list_daily_spending_for(
     of_interest_only: bool = False,
 ) -> dict[date, int]:
     """Spending aggregated by day for a specific client in absolute values."""
-    from_date, to_date = inclusive_date_range
     filtered_queryset = models.StatementItem.objects.filter(
         account__client=client,
         currency_code=currency,
-        time__range=(
-            tu.to_aware_day_start(from_date),
-            tu.to_aware_day_end(to_date),
-        ),
+        time__date__range=inclusive_date_range,
     )
     logger.info('Filtered queryset: %s', filtered_queryset)
     if of_interest_only:
@@ -36,7 +31,7 @@ def list_daily_spending_for(
         filtered_queryset = filtered_queryset.filter(mcc__in=mcc_codes)
     grouped_queryset = (
         filtered_queryset
-        .annotate(day=TruncDate('time', tzinfo=None))
+        .annotate(day=TruncDate('time'))
         .values('day')
         .annotate(total_spending=Sum('amount'))
         .order_by('day')
