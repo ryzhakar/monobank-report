@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "monoreport-django"
-description = "Financial reports based on monobank statements."
+description = "Joint financial reports from monobank statements."
 version = "0.1.0"
 readme = "README.md"
 authors = []
