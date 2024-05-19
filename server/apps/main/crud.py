@@ -22,6 +22,7 @@ def list_daily_spending_for(
         account__client=client,
         currency_code=currency,
         time__date__range=inclusive_date_range,
+        amount__lt=0,
     )
     logger.info('Filtered queryset: %s', filtered_queryset)
     if of_interest_only:
@@ -33,7 +34,7 @@ def list_daily_spending_for(
         filtered_queryset
         .annotate(day=TruncDate('time'))
         .values('day')
-        .annotate(total_spending=Sum('amount'))
+        .annotate(total_spending=Sum('operation_amount'))
         .order_by('day')
     )
     logger.info('Grouped queryset: %s', grouped_queryset)

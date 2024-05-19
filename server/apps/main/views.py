@@ -24,7 +24,7 @@ def per_day_spending_view(request: HttpRequest) -> HttpResponse:
             client=client,
             currency=CurrencyCode.UAH,
             inclusive_date_range=(first_day, last_day),
-            of_interest_only=False,
+            of_interest_only=True,
         )
         for client in list_clients()
     }
