@@ -1,6 +1,28 @@
 from django.contrib import admin
+from django.http import HttpRequest
 
 from server.apps.main import models
+
+
+@admin.register(models.BudgetingConfig)
+class BudgetingConfigAdmin(admin.ModelAdmin[models.BudgetingConfig]):
+    """Admin representation."""
+
+    def has_add_permission(
+        self,
+        request: HttpRequest,
+        obj: models.BudgetingConfig | None = None,  # noqa: WPS110
+    ) -> bool:
+        """Disable add if instance already exists."""
+        return not models.BudgetingConfig.objects.exists()
+
+    def has_delete_permission(
+        self,
+        request: HttpRequest,
+        obj: models.BudgetingConfig | None = None,  # noqa: WPS110
+    ) -> bool:
+        """Disable delete."""
+        return False
 
 
 @admin.register(models.MerchantCategoryCode)

@@ -1,4 +1,38 @@
+from typing import Any
+
+from django.core.exceptions import ValidationError
 from django.db import models
+
+
+class BudgetingConfig(models.Model):
+    """Singleton model for budgeting configuration."""
+    daily_allowance = models.IntegerField(
+        help_text='Daily spending limit in integer value',
+    )
+
+    class Meta:
+        """Override naming."""
+        db_table = 'single_budgeting_config'
+        verbose_name = 'Budgeting Config'
+        verbose_name_plural = 'Budgeting Config'
+
+    def __str__(self) -> str:
+        """Singleton name."""
+        return f'Daily Allowance Limit: {self.daily_allowance}'
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Ensure only one instance exists."""
+        if not self.pk and BudgetingConfig.objects.exists():
+            raise ValidationError(
+                'There is already an instance of BudgetingConfig.',
+            )
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls) -> 'BudgetingConfig':
+        """Load or create the singleton instance."""
+        single_object, _ = cls.objects.get_or_create(pk=1, daily_allowance=0)
+        return single_object
 
 
 class MerchantCategoryCode(models.Model):
