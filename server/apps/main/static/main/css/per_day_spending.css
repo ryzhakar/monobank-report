@@ -1,6 +1,5 @@
 /* Load Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
-
 /* Basic Reset */
 * {
     margin: 0;
@@ -58,6 +57,14 @@ tr:nth-child(even) {
 /* Ensure table is invisible when it should be */
 tr, th, td {
     border: none;
+}
+
+.positive-allowance {
+      color: green;
+}
+
+.negative-allowance {
+      color: red;
 }
 
 /* Responsive Design */
